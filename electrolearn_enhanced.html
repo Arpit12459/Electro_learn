@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElectroLearn — Advanced Electronics & Sensor Hub | Aerobay ATL Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a12;
+    --bg2: #080f1c;
+    --bg3: #0c1628;
+    --cyan: #00e5ff;
+    --blue: #1565c0;
+    --neon: #39ff14;
+    --orange: #ff6d00;
+    --purple: #7c4dff;
+    --pink: #ff4081;
+    --gold: #ffd600;
+    --text: #e0f0ff;
+    --muted: #7a9bb5;
+    --card: rgba(12,22,40,0.85);
+    --border: rgba(0,229,255,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Circuit board background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(5,10,18,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(0,229,255,0.5);
+  }
+  .logo span { color: var(--neon); }
+  .nav-links { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .nav-links a:hover {
+    color: var(--cyan);
+    border-color: var(--border);
+    background: rgba(0,229,255,0.05);
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(0,229,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.3);
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero-badge::before { content: '⚡'; }
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    animation: fadeUp 0.9s ease 0.2s both;
+  }
+  h1 .cyan { color: var(--cyan); text-shadow: 0 0 30px rgba(0,229,255,0.4); }
+  h1 .neon { color: var(--neon); text-shadow: 0 0 30px rgba(57,255,20,0.4); }
+  .hero-sub {
+    max-width: 650px;
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin: 1.2rem auto 2rem;
+    animation: fadeUp 0.9s ease 0.35s both;
+  }
+  .hero-chips {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    animation: fadeUp 0.9s ease 0.5s both;
+    margin-bottom: 2.5rem;
+  }
+  .chip {
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chip:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+  .chip-cyan { color: var(--cyan); border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.06); }
+  .chip-neon { color: var(--neon); border-color: rgba(57,255,20,0.4); background: rgba(57,255,20,0.06); }
+  .chip-orange { color: var(--orange); border-color: rgba(255,109,0,0.4); background: rgba(255,109,0,0.06); }
+  .chip-purple { color: var(--purple); border-color: rgba(124,77,255,0.4); background: rgba(124,77,255,0.06); }
+  .chip-pink { color: var(--pink); border-color: rgba(255,64,129,0.4); background: rgba(255,64,129,0.06); }
+  .chip-gold { color: var(--gold); border-color: rgba(255,214,0,0.4); background: rgba(255,214,0,0.06); }
+  .stat-bar {
+    display: flex; gap: 2.5rem; justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.9s ease 0.65s both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--cyan);
+  }
+  .stat-lbl { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 2rem; position: relative; z-index: 1; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 3px;
+    margin-bottom: 0.8rem;
+  }
+  .tag-cyan { background: rgba(0,229,255,0.1); color: var(--cyan); border: 1px solid rgba(0,229,255,0.3); }
+  .tag-neon { background: rgba(57,255,20,0.1); color: var(--neon); border: 1px solid rgba(57,255,20,0.3); }
+  .tag-orange { background: rgba(255,109,0,0.1); color: var(--orange); border: 1px solid rgba(255,109,0,0.3); }
+  .tag-purple { background: rgba(124,77,255,0.1); color: var(--purple); border: 1px solid rgba(124,77,255,0.3); }
+  .tag-pink { background: rgba(255,64,129,0.1); color: var(--pink); border: 1px solid rgba(255,64,129,0.3); }
+  .tag-gold { background: rgba(255,214,0,0.1); color: var(--gold); border: 1px solid rgba(255,214,0,0.3); }
+  h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .section-desc { color: var(--muted); max-width: 600px; margin: 0 auto; font-size: 0.95rem; }
+
+  /* ── COMPONENT CARDS ── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .comp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .comp-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent-color, var(--cyan));
+    opacity: 0.7;
+  }
+  .comp-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,229,255,0.35);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,229,255,0.05);
+  }
+  .comp-card .icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 0.9rem;
+    flex-shrink: 0;
+  }
+  .comp-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.5px;
+  }
+  .comp-card p { color: var(--muted); font-size: 0.83rem; line-height: 1.6; }
+  .comp-card .tags-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0.8rem; }
+  .tag-pill {
+    font-size: 0.65rem;
+    padding: 2px 9px;
+    border-radius: 50px;
+    font-family: 'Space Mono', monospace;
+    background: rgba(0,229,255,0.08);
+    color: var(--cyan);
+    border: 1px solid rgba(0,229,255,0.2);
+  }
+  .tag-pill.green { background: rgba(57,255,20,0.08); color: var(--neon); border-color: rgba(57,255,20,0.2); }
+  .tag-pill.orange { background: rgba(255,109,0,0.08); color: var(--orange); border-color: rgba(255,109,0,0.2); }
+  .tag-pill.purple { background: rgba(124,77,255,0.08); color: var(--purple); border-color: rgba(124,77,255,0.2); }
+
+  /* expandable detail */
+  .comp-detail {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease;
+    border-top: 0px solid transparent;
+  }
+  .comp-detail.open {
+    max-height: 600px;
+    border-top: 1px solid var(--border);
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+  }
+  .comp-detail ul { list-style: none; padding: 0; }
+  .comp-detail ul li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .comp-detail ul li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--cyan);
+  }
+  .comp-detail .grade-badge {
+    display: inline-block;
+    background: rgba(255,214,0,0.1);
+    color: var(--gold);
+    border: 1px solid rgba(255,214,0,0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    margin-top: 0.5rem;
+  }
+
+  /* ── SENSOR SECTION ── */
+  #sensors { background: linear-gradient(180deg, transparent 0%, rgba(0,40,80,0.2) 50%, transparent 100%); }
+  .sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .sensor-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .sensor-card::after {
+    content: '';
+    position: absolute; bottom: 0; right: 0;
+    width: 60px; height: 60px;
+    background: radial-gradient(circle at center, var(--glow-color, rgba(0,229,255,0.1)) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .sensor-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+  .sensor-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+  .sensor-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--cyan);
+  }
+  .sensor-card p { font-size: 0.8rem; color: var(--muted); }
+  .sensor-card .why { 
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--text);
+    background: rgba(0,229,255,0.04);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border-left: 2px solid var(--cyan);
+  }
+  .sensor-card .projects-list {
+    margin-top: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--neon);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── ATL SECTION ── */
+  #atl { background: linear-gradient(180deg, transparent 0%, rgba(0,20,50,0.3) 50%, transparent 100%); }
+  .atl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+  .atl-card {
+    background: var(--card);
+    border: 1px solid rgba(124,77,255,0.25);
+    border-radius: 12px;
+    padding: 1.4rem;
+    transition: all 0.3s;
+  }
+  .atl-card:hover { transform: translateY(-4px); border-color: rgba(124,77,255,0.5); box-shadow: 0 0 30px rgba(124,77,255,0.08); }
+  .atl-card .icon-big { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .atl-card h3 { font-family: 'Orbitron', monospace; font-size: 0.95rem; color: var(--purple); margin-bottom: 0.5rem; }
+  .atl-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.7rem; }
+  .benefit-list { list-style: none; padding: 0; }
+  .benefit-list li {
+    font-size: 0.78rem;
+    color: var(--text);
+    padding: 3px 0 3px 1.2rem;
+    position: relative;
+  }
+  .benefit-list li::before { content: '✦'; position: absolute; left: 0; color: var(--purple); font-size: 0.6rem; top: 5px; }
+
+  /* ── PROJECTS TABLE ── */
+  #projects { background: linear-gradient(180deg, transparent, rgba(57,255,20,0.02) 50%, transparent); }
+  .grade-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .grade-btn {
+    padding: 7px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .grade-btn:hover, .grade-btn.active {
+    background: rgba(57,255,20,0.08);
+    color: var(--neon);
+    border-color: rgba(57,255,20,0.4);
+  }
+  .project-table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  th {
+    background: rgba(57,255,20,0.08);
+    color: var(--neon);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(57,255,20,0.2);
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .project-row { display: none; }
+  .project-row.show { display: table-row; }
+  .diff-badge {
+    padding: 2px 9px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+  .diff-easy { background: rgba(57,255,20,0.12); color: var(--neon); }
+  .diff-med { background: rgba(255,214,0,0.12); color: var(--gold); }
+  .diff-hard { background: rgba(255,64,129,0.12); color: var(--pink); }
+
+  /* ── AERO SECTION ── */
+  #aero {
+    background: linear-gradient(180deg, transparent, rgba(255,109,0,0.03) 40%, transparent);
+  }
+  .aero-hero {
+    background: linear-gradient(135deg, rgba(255,109,0,0.06) 0%, rgba(124,77,255,0.06) 100%);
+    border: 1px solid rgba(255,109,0,0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .aero-hero h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+  }
+  .aero-hero p { color: var(--muted); max-width: 600px; margin: 0 auto; }
+  .aero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .aero-card {
+    background: var(--card);
+    border: 1px solid rgba(255,109,0,0.2);
+    border-radius: 12px;
+    padding: 1.3rem;
+    transition: all 0.3s;
+  }
+  .aero-card:hover { transform: translateY(-4px); border-color: rgba(255,109,0,0.45); box-shadow: 0 0 25px rgba(255,109,0,0.08); }
+  .aero-card h3 { font-family: 'Orbitron', monospace; font-size: 0.88rem; color: var(--orange); margin-bottom: 0.5rem; }
+  .aero-card .desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.7rem; }
+  .aero-list { list-style: none; padding: 0; }
+  .aero-list li {
+    font-size: 0.78rem;
+    color: var(--text);
+    padding: 3px 0 3px 1.2rem;
+    position: relative;
+  }
+  .aero-list li::before { content: '▶'; position: absolute; left: 0; color: var(--orange); font-size: 0.5rem; top: 6px; }
+  .drone-vs-rc {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+  @media (max-width: 600px) { .drone-vs-rc { grid-template-columns: 1fr; } }
+  .vs-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 1.4rem;
+    border: 1px solid;
+  }
+  .vs-card.rc { border-color: rgba(0,229,255,0.3); }
+  .vs-card.drone { border-color: rgba(255,109,0,0.3); }
+  .vs-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .vs-card.rc .vs-title { color: var(--cyan); }
+  .vs-card.drone .vs-title { color: var(--orange); }
+  .spec-row {
+    display: flex; justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.8rem;
+  }
+  .spec-label { color: var(--muted); }
+  .spec-val { color: var(--text); font-weight: 600; }
+
+  /* ── LEARNING PATH ── */
+  #learn-path {
+    background: linear-gradient(180deg, transparent, rgba(0,229,255,0.02) 50%, transparent);
+  }
+  .path-timeline {
+    position: relative;
+    padding: 1rem 0;
+  }
+  .path-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--cyan), var(--purple), var(--orange));
+    opacity: 0.3;
+  }
+  @media (max-width: 768px) {
+    .path-timeline::before { left: 20px; transform: none; }
+  }
+  .path-item {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .path-item { grid-template-columns: 60px 1fr; }
+    .path-item .path-right { grid-column: 2; }
+  }
+  .path-dot {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 0.9rem;
+    margin: 0 auto;
+    border: 2px solid;
+    position: relative; z-index: 1;
+  }
+  .path-box {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+  }
+  .path-box h4 { font-family: 'Orbitron', monospace; font-size: 0.82rem; margin-bottom: 0.4rem; }
+  .path-box ul { list-style: none; padding: 0; }
+  .path-box ul li { font-size: 0.78rem; color: var(--muted); padding: 2px 0; }
+  .path-box ul li::before { content: '• '; color: var(--cyan); }
+
+  /* ── GLOSSARY ── */
+  #glossary { background: var(--bg2); }
+  .gloss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; }
+  .gloss-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 0.9rem;
+    transition: all 0.2s;
+  }
+  .gloss-item:hover { background: rgba(0,229,255,0.04); border-color: rgba(0,229,255,0.15); }
+  .gloss-term {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--cyan);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .gloss-def { font-size: 0.78rem; color: var(--muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+  }
+  footer strong { color: var(--cyan); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 0 auto 0.8rem;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .blink { animation: pulse 2s ease infinite; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius: 3px; }
+
+  /* Back to top */
+  #back-top {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.3);
+    color: var(--cyan);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    z-index: 99;
+    text-decoration: none;
+  }
+  #back-top:hover { background: rgba(0,229,255,0.2); transform: translateY(-3px); }
+
+  /* Section dividers */
+  .sec-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── MOBILE NAV HAMBURGER ── */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+  .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--cyan); border-radius: 2px; transition: all 0.3s; }
+  @media (max-width: 768px) {
+    .nav-toggle { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed; top: 60px; left: 0; right: 0;
+      background: rgba(5,10,18,0.98);
+      backdrop-filter: blur(16px);
+      padding: 1rem; flex-direction: column; gap: 4px;
+      border-bottom: 1px solid var(--border); z-index: 99;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 10px 14px; font-size: 0.8rem; }
+  }
+
+  /* ── FOUNDER SECTION ── */
+  #founder { background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, rgba(124,77,255,0.04) 100%); }
+  .founder-card {
+    max-width: 720px; margin: 0 auto;
+    background: var(--card);
+    border: 1px solid rgba(0,229,255,0.3);
+    border-radius: 20px; padding: 2.5rem;
+    display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;
+    position: relative; overflow: hidden;
+  }
+  .founder-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+  }
+  .founder-avatar {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(124,77,255,0.3));
+    border: 2px solid rgba(0,229,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.8rem; flex-shrink: 0; position: relative;
+  }
+  .founder-avatar::after {
+    content: '✦'; position: absolute; bottom: -4px; right: -4px;
+    background: var(--cyan); color: #050a12; font-size: 0.6rem;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-weight: 900;
+  }
+  .founder-info { flex: 1; min-width: 200px; }
+  .founder-name { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: var(--cyan); margin-bottom: 4px; letter-spacing: 1px; }
+  .founder-role { font-size: 0.72rem; color: var(--neon); font-family: 'Space Mono', monospace; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.8rem; }
+  .founder-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .founder-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+  .f-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.68rem; font-family: 'Space Mono', monospace; background: rgba(0,229,255,0.08); color: var(--cyan); border: 1px solid rgba(0,229,255,0.25); }
+  .founder-contact { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--muted); background: rgba(255,255,255,0.03); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.07); flex-wrap: wrap; }
+  .founder-contact a { color: var(--cyan); text-decoration: none; font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+  .founder-contact a:hover { text-decoration: underline; }
+
+  /* ── ADVANCED SENSORS WITH IMAGES ── */
+  #adv-sensors { background: linear-gradient(180deg, transparent 0%, rgba(57,255,20,0.02) 50%, transparent 100%); }
+  .adv-sensor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+  .adv-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: all 0.3s; }
+  .adv-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,0.5); }
+  .adv-img-wrap { width: 100%; height: 150px; background: rgba(0,229,255,0.04); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .adv-img-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: opacity 0.3s; }
+  .adv-card:hover .adv-img-wrap img { opacity: 1; }
+  .adv-img-fallback { font-size: 4rem; opacity: 0.5; }
+  .adv-img-label { position: absolute; bottom: 8px; left: 10px; font-size: 0.62rem; font-family: 'Space Mono', monospace; background: rgba(5,10,18,0.85); color: var(--cyan); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(0,229,255,0.2); }
+  .adv-body { padding: 1.2rem; }
+  .adv-body h3 { font-family: 'Orbitron', monospace; font-size: 0.88rem; color: var(--neon); margin-bottom: 0.4rem; }
+  .adv-body p { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.7rem; }
+  .adv-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 0.7rem; }
+  .adv-spec { font-size: 0.68rem; font-family: 'Space Mono', monospace; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px; color: var(--text); border: 1px solid rgba(255,255,255,0.06); }
+  .adv-spec span { color: var(--cyan); display: block; font-size: 0.6rem; margin-bottom: 1px; }
+  .adv-uses { font-size: 0.72rem; color: var(--purple); font-family: 'Space Mono', monospace; background: rgba(124,77,255,0.07); padding: 6px 10px; border-radius: 6px; border-left: 2px solid var(--purple); }
+
+  /* ── SMART PROJECTS ── */
+  #smart-projects { background: linear-gradient(180deg, transparent, rgba(255,64,129,0.02) 50%, transparent); }
+  .smart-proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.4rem; }
+  .smart-proj-card { background: var(--card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s; }
+  .smart-proj-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .proj-level-banner { padding: 6px 14px; font-size: 0.65rem; font-family: 'Space Mono', monospace; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; text-align: center; }
+  .level-student  { background: rgba(57,255,20,0.12);  color: var(--neon); }
+  .level-trainer  { background: rgba(124,77,255,0.12); color: var(--purple); }
+  .level-advanced { background: rgba(255,64,129,0.12); color: var(--pink); }
+  .proj-header { padding: 1.2rem 1.4rem 0.8rem; border-bottom: 1px solid var(--border); }
+  .proj-emoji { font-size: 2.2rem; margin-bottom: 0.5rem; }
+  .smart-proj-card h3 { font-family: 'Orbitron', monospace; font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .proj-body { padding: 1rem 1.4rem 1.4rem; }
+  .proj-body p { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.8rem; }
+  .proj-tech-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.8rem; }
+  .proj-outcome { font-size: 0.78rem; color: var(--gold); background: rgba(255,214,0,0.07); padding: 8px 12px; border-radius: 8px; border-left: 2px solid var(--gold); }
+
+  /* ── AEROBAY HIGHLIGHT ── */
+  #aerobay { background: linear-gradient(135deg, rgba(255,109,0,0.04) 0%, rgba(124,77,255,0.04) 100%); }
+  .aerobay-banner { background: linear-gradient(135deg, rgba(255,109,0,0.1), rgba(124,77,255,0.08)); border: 1px solid rgba(255,109,0,0.3); border-radius: 20px; padding: 2.5rem; text-align: center; margin-bottom: 2.5rem; position: relative; overflow: hidden; }
+  .aerobay-banner::before { content: '✈'; position: absolute; font-size: 8rem; opacity: 0.04; right: 2rem; top: 50%; transform: translateY(-50%); }
+  .aerobay-banner h2 { color: var(--orange); margin-bottom: 0.6rem; }
+  .aerobay-banner p { color: var(--muted); max-width: 600px; margin: 0 auto 1.5rem; }
+  .aerobay-stats { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; }
+  .ab-stat { text-align: center; background: rgba(0,0,0,0.3); padding: 12px 24px; border-radius: 12px; border: 1px solid rgba(255,109,0,0.2); }
+  .ab-stat-num { font-family: 'Orbitron', monospace; font-size: 1.6rem; font-weight: 900; color: var(--orange); }
+  .ab-stat-lbl { font-size: 0.68rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+  .aerobay-features { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+  .aerobay-feat { background: var(--card); border: 1px solid rgba(255,109,0,0.2); border-radius: 14px; padding: 1.5rem; transition: all 0.3s; }
+  .aerobay-feat:hover { border-color: rgba(255,109,0,0.5); transform: translateY(-4px); }
+  .aerobay-feat .feat-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+  .aerobay-feat h3 { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--orange); margin-bottom: 0.4rem; }
+  .aerobay-feat p { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    section { padding: 3rem 1.2rem; }
+    .founder-card { padding: 1.6rem; flex-direction: column; text-align: center; }
+    .founder-avatar { margin: 0 auto; }
+    .smart-proj-grid, .adv-sensor-grid { grid-template-columns: 1fr; }
+    h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
+    .hero-chips { gap: 7px; }
+    .stat-bar { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Electro<span>Learn</span></div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
+    <a href="#components">⚡ Components</a>
+    <a href="#sensors">📡 Sensors</a>
+    <a href="#adv-sensors">🔬 Advanced</a>
+    <a href="#atl">🛠 ATL Lab</a>
+    <a href="#aerobay">✈️ Aerobay</a>
+    <a href="#smart-projects">💡 Smart Projects</a>
+    <a href="#projects">🚀 Grade Projects</a>
+    <a href="#aero">🚁 Drones</a>
+    <a href="#learn-path">📚 Path</a>
+    <a href="#founder">👤 Founder</a>
+    <a href="#glossary">📖 Glossary</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">AEROBAY · ATL LAB · ADVANCED ELECTRONICS · GRADES 5–12</div>
+  <h1>
+    Master <span class="cyan">Advanced Electronics</span><br>
+    &amp; Sensors · Build the <span class="neon">Future</span>
+  </h1>
+  <p class="hero-sub">
+    Your complete guide to electronics, advanced sensors, ATL lab, aeromodelling — from basic concepts to building real drones, RC planes &amp; smart IoT systems. Curated by <strong style="color:var(--cyan)">Arpit Kesharwani</strong>, B.Tech CSE.
+  </p>
+  <div class="hero-chips">
+    <span class="chip chip-cyan" onclick="scrollTo('#components')">⚡ Basic Components</span>
+    <span class="chip chip-neon" onclick="scrollTo('#adv-sensors')">🔬 Advanced Sensors</span>
+    <span class="chip chip-purple" onclick="scrollTo('#atl')">🛠 ATL Lab</span>
+    <span class="chip chip-orange" onclick="scrollTo('#aerobay')">✈️ Aerobay</span>
+    <span class="chip chip-pink" onclick="scrollTo('#smart-projects')">💡 Smart Projects</span>
+    <span class="chip chip-gold" onclick="scrollTo('#glossary')">📖 Glossary</span>
+  </div>
+  <div class="stat-bar">
+    <div class="stat"><div class="stat-num">60+</div><div class="stat-lbl">Components</div></div>
+    <div class="stat"><div class="stat-num">30+</div><div class="stat-lbl">Sensors</div></div>
+    <div class="stat"><div class="stat-num">50+</div><div class="stat-lbl">Projects</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Grade Levels</div></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 1 — BASIC COMPONENTS
+     ════════════════════════════════════════ -->
+<section id="components">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-cyan">Module 01</div>
+      <div class="divider"></div>
+      <h2>⚡ Basic Electronics Components</h2>
+      <p class="section-desc">Every component explained — what it does, why we use it, and how it fits into real projects. <strong style="color:var(--cyan)">Click any card to expand details!</strong></p>
+    </div>
+    <div class="comp-grid" id="comp-grid"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 2 — SENSORS
+     ════════════════════════════════════════ -->
+<section id="sensors">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-neon">Module 02</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--neon),transparent)"></div>
+      <h2 style="color:var(--neon)">📡 Sensors — The Eyes & Ears of Electronics</h2>
+      <p class="section-desc">Sensors detect the physical world and convert it into electrical signals. These are the building blocks of every smart project.</p>
+    </div>
+    <div class="sensor-grid" id="sensor-grid"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 3 — ATL LAB
+     ════════════════════════════════════════ -->
+<section id="atl">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-purple">Module 03</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--purple),transparent)"></div>
+      <h2 style="color:var(--purple)">🛠 ATL Lab Components & Tools</h2>
+      <p class="section-desc">Atal Tinkering Lab essentials — the microcontrollers, modules, and tools every student should know to build amazing projects.</p>
+    </div>
+    <div class="atl-grid" id="atl-grid"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 4 — PROJECTS BY GRADE
+     ════════════════════════════════════════ -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-neon">Module 04</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--neon),transparent)"></div>
+      <h2>🚀 Projects by Grade Level</h2>
+      <p class="section-desc">Choose your grade and discover exciting projects you can build using sensors and electronics components!</p>
+    </div>
+    <div class="grade-tabs" id="grade-tabs"></div>
+    <div class="project-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Sensors Used</th>
+            <th>Components</th>
+            <th>What You Learn</th>
+            <th>Level</th>
+          </tr>
+        </thead>
+        <tbody id="project-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 5 — AEROMODELLING
+     ════════════════════════════════════════ -->
+<section id="aero">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-orange">Module 05</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--orange),transparent)"></div>
+      <h2 style="color:var(--orange)">✈️ Aeromodelling — RC Planes &amp; Drones</h2>
+      <p class="section-desc">Take your electronics skills to the sky! Learn about RC aircraft, drone technology, and the physics behind flight.</p>
+    </div>
+
+    <div class="aero-hero">
+      <h3>🛩️ Why Learn Aeromodelling?</h3>
+      <p>Aeromodelling combines physics, electronics, programming, and engineering design. It teaches students about aerodynamics, control systems, battery management, and real-time feedback — skills that directly apply to aerospace, robotics, and advanced engineering careers.</p>
+    </div>
+
+    <div class="aero-grid" id="aero-grid"></div>
+
+    <div class="drone-vs-rc" id="drone-vs-rc">
+      <!-- filled by JS -->
+    </div>
+
+    <div style="margin-top:2rem">
+      <h3 style="font-family:'Orbitron',monospace;font-size:1rem;color:var(--orange);margin-bottom:1rem;">🚁 Drone Components Deep-Dive</h3>
+      <div class="atl-grid" id="drone-parts-grid"></div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 6 — LEARNING PATH
+     ════════════════════════════════════════ -->
+<section id="learn-path">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-cyan">Module 06</div>
+      <div class="divider"></div>
+      <h2>📚 Your Learning Path</h2>
+      <p class="section-desc">Follow this roadmap from complete beginner to building advanced drones and smart systems.</p>
+    </div>
+    <div class="path-timeline" id="path-timeline"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ════════════════════════════════════════
+     SECTION 7 — GLOSSARY
+     ════════════════════════════════════════ -->
+<section id="glossary">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-gold">Module 07</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--gold),transparent)"></div>
+      <h2 style="color:var(--gold)">📖 Electronics Glossary</h2>
+      <p class="section-desc">Key terms every electronics student should know — explained simply!</p>
+    </div>
+    <div class="gloss-grid" id="gloss-grid"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- AEROBAY HIGHLIGHT -->
+<section id="aerobay">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-orange">Aerobay</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--orange),transparent)"></div>
+      <h2 style="color:var(--orange)">✈️ Aerobay / ATL Lab — Innovation Hub</h2>
+      <p class="section-desc">Where students transform ideas into flying machines, robots, and smart systems. A state-of-the-art space for hands-on learning.</p>
+    </div>
+    <div class="aerobay-banner">
+      <h2>🛩️ Aerobay — Where Makers Take Flight</h2>
+      <p>Aerobay is the advanced electronics and aeromodelling wing of our ATL Lab. Students learn to design, build, and fly RC aircraft, drones, and autonomous systems — bridging theory and real-world engineering.</p>
+      <div class="aerobay-stats">
+        <div class="ab-stat"><div class="ab-stat-num">50+</div><div class="ab-stat-lbl">Aircraft Built</div></div>
+        <div class="ab-stat"><div class="ab-stat-num">200+</div><div class="ab-stat-lbl">Students Trained</div></div>
+        <div class="ab-stat"><div class="ab-stat-num">30+</div><div class="ab-stat-lbl">Smart Projects</div></div>
+        <div class="ab-stat"><div class="ab-stat-num">5+</div><div class="ab-stat-lbl">Lab Stations</div></div>
+      </div>
+    </div>
+    <div class="aerobay-features">
+      <div class="aerobay-feat"><div class="feat-icon">🏗️</div><h3>Build Workshop</h3><p>Fully equipped workbench for assembling drones, RC planes, and electronic projects. Soldering stations, 3D printers, and laser cutters available.</p></div>
+      <div class="aerobay-feat"><div class="feat-icon">📡</div><h3>Flight Testing Zone</h3><p>Safe indoor and outdoor areas for test flights, telemetry analysis, and PID tuning. FPV goggles and ground control stations on hand.</p></div>
+      <div class="aerobay-feat"><div class="feat-icon">💻</div><h3>Programming Bay</h3><p>Arduino, Raspberry Pi, and ESP32 stations. Students code flight controllers, IoT systems, and autonomous navigation algorithms.</p></div>
+      <div class="aerobay-feat"><div class="feat-icon">🔬</div><h3>Sensor Lab</h3><p>Library of 30+ sensor modules, oscilloscopes, multimeters, and logic analyzers. Perfect for prototyping and debugging advanced circuits.</p></div>
+      <div class="aerobay-feat"><div class="feat-icon">🏆</div><h3>Competition Prep</h3><p>Dedicated space for preparing competition entries — drone racing, robotics olympiad, science fairs, and national innovation challenges.</p></div>
+      <div class="aerobay-feat"><div class="feat-icon">👨‍🏫</div><h3>Trainer Sessions</h3><p>Weekly advanced sessions by expert trainers covering circuit design, PCB fabrication, flight dynamics, and professional project documentation.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ADVANCED SENSORS WITH IMAGES -->
+<section id="adv-sensors">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-neon">Advanced Module</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--neon),transparent)"></div>
+      <h2 style="color:var(--neon)">🔬 Advanced Electronics &amp; Sensors</h2>
+      <p class="section-desc">High-level sensors used in professional projects, drones, IoT, and robotics — with visual references so you can identify them instantly.</p>
+    </div>
+    <div class="adv-sensor-grid" id="adv-sensor-grid"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- SMART PROJECTS -->
+<section id="smart-projects">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-pink">Smart Projects</div>
+      <div class="divider" style="background:linear-gradient(90deg,transparent,var(--pink),transparent)"></div>
+      <h2 style="color:var(--pink)">💡 Smart Projects — Student &amp; Trainer Level</h2>
+      <p class="section-desc">Real-world projects from beginner student level to advanced trainer level. Build systems that solve actual problems using sensors, IoT, and AI.</p>
+    </div>
+    <div class="smart-proj-grid" id="smart-proj-grid"></div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- FOUNDER SECTION -->
+<section id="founder">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag tag-cyan">About</div>
+      <div class="divider"></div>
+      <h2>👤 Meet the Founder</h2>
+      <p class="section-desc">The mind behind ElectroLearn — passionate about making advanced electronics accessible to every student.</p>
+    </div>
+    <div class="founder-card">
+      <div class="founder-avatar">👨‍💻</div>
+      <div class="founder-info">
+        <div class="founder-name">Arpit Kesharwani</div>
+        <div class="founder-role">⚡ Founder &amp; Lead Educator · ElectroLearn</div>
+        <p class="founder-desc">
+          Graduate in <strong style="color:var(--cyan)">B.Tech Computer Science Engineering</strong>. Passionate about bridging the gap between classroom theory and hands-on electronics education. Arpit created ElectroLearn to empower students from Grade 5–12 with real skills in electronics, sensors, IoT, and aeromodelling through the Aerobay / ATL Lab ecosystem.
+        </p>
+        <div class="founder-badges">
+          <span class="f-badge">🎓 B.Tech CSE</span>
+          <span class="f-badge">⚡ Electronics Educator</span>
+          <span class="f-badge">🚁 Drone Specialist</span>
+          <span class="f-badge">🤖 IoT Developer</span>
+          <span class="f-badge">✈️ Aerobay Trainer</span>
+        </div>
+        <div class="founder-contact">
+          <span>📧 Contact:</span>
+          <a href="mailto:arpitcs2024@gmail.com">arpitcs2024@gmail.com</a>
+          <span style="color:var(--border);margin:0 4px">|</span>
+          <span style="font-size:0.72rem">For collaborations, workshops &amp; lab sessions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div>⚡ <strong>ElectroLearn ATL Hub</strong> · Advanced Electronics &amp; Sensor Education · Grades 5–12</div>
+  <div style="margin-top:6px;font-size:0.72rem;color:var(--cyan)">Founded by <strong>Arpit Kesharwani</strong> · B.Tech CSE · <a href="mailto:arpitcs2024@gmail.com" style="color:var(--cyan);text-decoration:none">arpitcs2024@gmail.com</a></div>
+  <div style="margin-top:6px;font-size:0.68rem;opacity:0.5;">Learn · Tinker · Build · Fly 🚀 · Aerobay / ATL Lab</div>
+</footer>
+
+<a href="#hero" id="back-top">↑</a>
+
+<!-- ═══════════════════ JAVASCRIPT DATA ═══════════════════ -->
+<script>
+/* ─── COMPONENTS DATA ─── */
+const COMPONENTS = [
+  {
+    name:"Resistor", icon:"🔴", color:"#ff5252",
+    short:"Limits electric current flow in a circuit.",
+    why:"Without resistors, too much current would destroy LEDs, transistors, and ICs. They control voltage and current precisely.",
+    details:["Measured in Ohms (Ω), Kilo-ohms (kΩ), Mega-ohms (MΩ)","Color bands tell us its value","Fixed & Variable types (Potentiometer)","Used in every electronic circuit","Follows Ohm's Law: V = IR"],
+    uses:["LED current limiting","Voltage dividers","Pull-up/Pull-down circuits","Sensor interface"],
+    grades:"Grade 5–6 (Beginner)",
+    tags:["Passive","Analog","Essential"]
+  },
+  {
+    name:"Capacitor", icon:"🔵", color:"#448aff",
+    short:"Stores and releases electrical energy quickly.",
+    why:"Capacitors smooth out power supply fluctuations, filter noise, and store energy for quick bursts — critical in audio, motors, and ICs.",
+    details:["Measured in Farads (F), microfarads (µF), picofarads (pF)","Electrolytic (polarized) vs Ceramic (non-polarized)","Used in timing circuits (with resistors)","Blocks DC, passes AC signals","Charges and discharges rapidly"],
+    uses:["Power supply filtering","Timing circuits (555 timer)","Audio coupling","Motor start circuits"],
+    grades:"Grade 6–8",
+    tags:["Passive","Energy Storage","Filtering"]
+  },
+  {
+    name:"LED", icon:"💡", color:"#ffeb3b",
+    short:"Light-Emitting Diode — produces light when current flows.",
+    why:"LEDs are energy-efficient, long-lasting, and come in many colors. They're the perfect output indicator for any project.",
+    details:["Always needs a current-limiting resistor","Forward voltage ~2V (red) to ~3.5V (blue/white)","Available in RGB for color mixing","IR LEDs used in remote controls","High brightness LEDs for lighting"],
+    uses:["Status indicators","7-segment displays","RGB mood lighting","Traffic light models","IR communication"],
+    grades:"Grade 5–6 (Perfect starter!)  ",
+    tags:["Output","Visual","Beginner"]
+  },
+  {
+    name:"Transistor", icon:"📟", color:"#00e5ff",
+    short:"Acts as a switch or amplifier for electronic signals.",
+    why:"Transistors are the fundamental building block of all modern electronics — billions exist in every computer chip.",
+    details:["NPN and PNP types (BJT)","MOSFET types for higher power","Three terminals: Base, Collector, Emitter","Used in digital logic gates","Amplifies weak signals (microphone, sensors)"],
+    uses:["Motor control","Amplifier circuits","Digital logic","Darlington arrays","Switch relay control"],
+    grades:"Grade 8–10",
+    tags:["Active","Amplifier","Switch"]
+  },
+  {
+    name:"Diode", icon:"🔺", color:"#ff6d00",
+    short:"Allows current to flow in only one direction.",
+    why:"Diodes protect circuits from reverse polarity, convert AC to DC (rectifier), and are the basis of solar cells.",
+    details:["Anode (+) to Cathode (–) for forward bias","Zener diode regulates voltage","Schottky diode switches very fast","1N4007 is the most common type","LED is a special type of diode"],
+    uses:["Reverse polarity protection","AC to DC conversion","Voltage regulation","Freewheeling in motor circuits"],
+    grades:"Grade 7–9",
+    tags:["Passive","Protection","Rectifier"]
+  },
+  {
+    name:"Inductor (Coil)", icon:"🌀", color:"#7c4dff",
+    short:"Stores energy in a magnetic field. Resists changes in current.",
+    why:"Inductors are key in power converters, filters, and wireless charging systems.",
+    details:["Measured in Henrys (H), millihenrys (mH)","Opposes changes in current","Works opposite to capacitor in circuits","Used in LC tank circuits for radio","Ferrite core boosts inductance"],
+    uses:["Power supply boost/buck converters","RF filters","Chokes to block high-frequency noise","Wireless charging coils"],
+    grades:"Grade 9–11",
+    tags:["Passive","Magnetic","RF"]
+  },
+  {
+    name:"IC (555 Timer)", icon:"⏱️", color:"#ff4081",
+    short:"Versatile chip for timing, oscillation, and pulse generation.",
+    why:"The 555 timer can create time delays, flashing LEDs, PWM signals, and square waves — with just a few external components.",
+    details:["Three modes: Astable, Monostable, Bistable","8-pin DIP package","VCC from 5V to 15V","Timing from microseconds to hours","Can source/sink up to 200mA"],
+    uses:["LED flasher","Buzzer alarm","PWM motor control","Clap switch","Missing pulse detector"],
+    grades:"Grade 7–10",
+    tags:["IC","Timer","PWM"]
+  },
+  {
+    name:"Relay", icon:"🔌", color:"#4caf50",
+    short:"Electrically controlled switch for high-power circuits.",
+    why:"Relays let a low-power microcontroller (like Arduino) safely switch high-voltage appliances like lights, fans, or motors.",
+    details:["Coil + mechanical switch inside","5V relay activated by Arduino/transistor","Normally Open (NO) and Normally Closed (NC) contacts","Rated for AC and DC loads","Opto-isolated relay modules are safer"],
+    uses:["Home automation switching","Motor ON/OFF control","Smart appliance control","Security alarm systems"],
+    grades:"Grade 8–11",
+    tags:["Actuator","High Voltage","Switch"]
+  },
+  {
+    name:"Buzzer", icon:"🔔", color:"#ff6d00",
+    short:"Creates sound from electrical signals.",
+    why:"Buzzers give audio feedback in projects — perfect for alarms, notifications, and simple music.",
+    details:["Active buzzer: beeps when powered","Passive buzzer: plays different tones with PWM","Piezoelectric element inside","3V to 12V operating range","Can generate simple melodies with code"],
+    uses:["Burglar alarms","Doorbell projects","Score indicator in games","Morse code sender"],
+    grades:"Grade 5–8",
+    tags:["Output","Audio","Beginner"]
+  },
+  {
+    name:"DC Motor", icon:"⚙️", color:"#00bcd4",
+    short:"Converts electrical energy to rotational motion.",
+    why:"DC motors power everything from robots to drones, cars to fans. Learning to control them with code is a core skill.",
+    details:["Speed controlled by PWM signal","Direction controlled by H-bridge (L298N)","Brushed vs Brushless types","Stall current can damage Arduino directly","Gear motors increase torque at lower speed"],
+    uses:["Robot wheels","Fan/propeller spin","Conveyor belt projects","Automated door opener"],
+    grades:"Grade 6–10",
+    tags:["Actuator","Motion","Robot"]
+  },
+  {
+    name:"Servo Motor", icon:"🦾", color:"#ff4081",
+    short:"Precise position-controlled motor (0° to 180°).",
+    why:"Servos are used in robotics for precise arm movement, in RC planes for control surfaces, and in pan-tilt camera mounts.",
+    details:["Controlled by PWM pulse width (1–2ms)","Built-in gear reduction + feedback","SG90: small, lightweight (9g)","MG996R: metal gear, higher torque","3-wire: Power, Ground, Signal"],
+    uses:["Robot arm joints","RC plane aileron/elevator","Camera pan-tilt mount","Smart dustbin lid opener"],
+    grades:"Grade 7–11",
+    tags:["Actuator","Precise","RC/Robot"]
+  },
+  {
+    name:"Stepper Motor", icon:"🔧", color:"#9c27b0",
+    short:"Rotates in precise steps — ideal for 3D printers and CNC.",
+    why:"Stepper motors move in exact angles (typically 1.8° per step), making them perfect for precise positioning without feedback sensors.",
+    details:["28BYJ-48 (unipolar) with ULN2003 driver","NEMA 17 used in 3D printers","4-wire or 6-wire configurations","Microstepping for smoother movement","Needs motor driver IC always"],
+    uses:["3D printer axes","CNC machines","Robotic arm positioning","Automatic telescope tracker"],
+    grades:"Grade 9–12",
+    tags:["Actuator","Precision","CNC/3D"]
+  },
+  {
+    name:"Potentiometer", icon:"🎛️", color:"#ffeb3b",
+    short:"Variable resistor — adjusts voltage/resistance by turning a knob.",
+    why:"Potentiometers are used to control brightness, volume, or speed. They provide analog input to microcontrollers.",
+    details:["3 terminals: two ends + wiper","Linear and logarithmic tapers","10K ohm most common for Arduino","Used as analog input (0–5V range)","Rotary and slide variants exist"],
+    uses:["Volume/brightness control","Joystick position sensing","Arduino analog input demo","Variable power supply"],
+    grades:"Grade 5–8",
+    tags:["Input","Analog","Beginner"]
+  },
+  {
+    name:"Push Button", icon:"🔘", color:"#4caf50",
+    short:"Momentary switch that closes a circuit when pressed.",
+    why:"Buttons are the simplest form of user input. They teach students about digital input, pull-up resistors, and debouncing.",
+    details:["Normally Open (NO) or Normally Closed (NC)","Tactile feedback switches for PCBs","Needs pull-up or pull-down resistor","Debouncing prevents false triggers","4-pin DIP package most common"],
+    uses:["Start/Stop control","Counter project","Piano keyboard simulation","Morse code input"],
+    grades:"Grade 5–7",
+    tags:["Input","Digital","Beginner"]
+  },
+  {
+    name:"Crystal Oscillator", icon:"💎", color:"#e91e63",
+    short:"Provides precise clock frequency for microcontrollers.",
+    why:"Accurate timing is essential for communication protocols, real-time clocks, and microcontroller operation.",
+    details:["16 MHz crystal used in Arduino","Piezoelectric vibration at precise frequency","Needs two 22pF capacitors","More stable than RC oscillators","RTC modules use 32.768 kHz crystal"],
+    uses:["Arduino clock source","Real-time clock (RTC)","UART baud rate accuracy","GPS timing"],
+    grades:"Grade 9–12",
+    tags:["Timing","Oscillator","IC"]
+  },
+  {
+    name:"Voltage Regulator", icon:"⚡", color:"#00e5ff",
+    short:"Maintains constant output voltage regardless of input fluctuation.",
+    why:"Protects sensitive components from voltage spikes and ensures stable 5V/3.3V supply for microcontrollers.",
+    details:["7805: outputs constant 5V","LM317: adjustable output voltage","AMS1117: 3.3V for ESP32/NodeMCU","LDO (Low Dropout) types are efficient","Input must be 2V+ above output"],
+    uses:["Power supply for projects","Arduino Uno power circuit","Battery-powered regulators","Custom PCB power design"],
+    grades:"Grade 8–11",
+    tags:["Power","Protection","Essential"]
+  },
+  {
+    name:"Op-Amp (LM741/LM358)", icon:"📐", color:"#ff6d00",
+    short:"Operational Amplifier — amplifies tiny voltage differences.",
+    why:"Op-amps are in every analog system: they amplify microphone signals, compare voltages, and act as filters.",
+    details:["Two inputs: Inverting (−) and Non-Inverting (+)","Very high open-loop gain (~100,000×)","LM358: dual op-amp, 5V compatible","Used in comparator mode for sensor thresholds","Active filters using op-amps"],
+    uses:["Microphone pre-amplifier","Comparator circuit","Audio equalizer","Instrumentation amplifier for sensors"],
+    grades:"Grade 10–12",
+    tags:["Analog","Amplifier","IC"]
+  },
+  {
+    name:"7-Segment Display", icon:"🔢", color:"#ff4081",
+    short:"Shows digits 0–9 using 7 LED segments.",
+    why:"Teaches multiplexing, binary-to-decimal conversion, and direct LED driving — fundamental display concepts.",
+    details:["Common Anode or Common Cathode types","Each segment is an individual LED","4-digit modules use multiplexing","TM1637 module: 2-wire I2C interface","Used before LCDs became cheap"],
+    uses:["Digital clock display","Scoreboard counter","Thermometer display","Frequency meter"],
+    grades:"Grade 7–9",
+    tags:["Output","Display","LED"]
+  },
+  {
+    name:"LCD Display (16×2)", icon:"🖥️", color:"#7c4dff",
+    short:"Liquid Crystal Display showing 2 rows of 16 characters each.",
+    why:"LCDs display sensor readings, messages, and data clearly. Learning to use them teaches I2C/parallel interfaces.",
+    details:["16 pins (parallel) or 4 pins with I2C module","I2C address: 0x27 or 0x3F","5V powered, 3.3V compatible with logic level","Backlight can be controlled","LiquidCrystal_I2C library for Arduino"],
+    uses:["Temperature display","Distance meter readout","Password entry system","Mini calculator display"],
+    grades:"Grade 7–10",
+    tags:["Output","Display","I2C"]
+  },
+  {
+    name:"OLED Display (0.96\")", icon:"🌟", color:"#00e5ff",
+    short:"Tiny, crisp display using organic LEDs — no backlight needed.",
+    why:"OLEDs have excellent contrast, work at 3.3V/5V, and display graphics, making them ideal for compact wearable projects.",
+    details:["128×64 pixels monochrome","I2C interface (SDA, SCL)","Works with SSD1306 Adafruit library","Can draw shapes, text, and bitmaps","Very low power consumption"],
+    uses:["Smartwatch face prototype","Air quality monitor display","IoT sensor node screen","Step counter display"],
+    grades:"Grade 8–12",
+    tags:["Output","Display","I2C","IoT"]
+  },
+  {
+    name:"MOSFET (IRF540N)", icon:"🔷", color:"#00bcd4",
+    short:"Voltage-controlled transistor for switching high-current loads.",
+    why:"MOSFETs can control motors, LEDs, and heating elements with very low loss — critical for battery-powered and power electronics projects.",
+    details:["Gate, Drain, Source terminals","Logic-level MOSFETs work with 3.3V/5V","N-Channel: most common for low-side switching","P-Channel: for high-side switching","IRF540N: 33A, 100V rated"],
+    uses:["High-power LED dimmer","Brushless motor driver","Battery management system","Electronic load"],
+    grades:"Grade 10–12",
+    tags:["Active","Power","Driver"]
+  },
+];
+
+/* ─── SENSORS DATA ─── */
+const SENSORS = [
+  { icon:"🌡️", name:"DHT11/DHT22 Temperature & Humidity", desc:"Measures air temperature (−40 to 80°C) and relative humidity (0–100%).", why:"📌 Used in weather stations, smart ACs, greenhouse automation, and HVAC systems.", projects:"Temp-humidity monitor, Smart greenhouse, Weather station", glow:"rgba(255,100,0,0.15)" },
+  { icon:"📏", name:"HC-SR04 Ultrasonic Sensor", desc:"Measures distance using sound waves (2cm to 400cm). Like a bat's echolocation!", why:"📌 Used in parking sensors, obstacle-avoiding robots, water level meters.", projects:"Distance meter, Obstacle robot, Automatic tap", glow:"rgba(0,229,255,0.15)" },
+  { icon:"🔴", name:"IR Sensor (Infrared)", desc:"Detects objects and lines using infrared light reflection.", why:"📌 Foundation of line-following robots, TV remotes, proximity detection.", projects:"Line follower robot, Object counter, IR remote decoder", glow:"rgba(255,50,50,0.15)" },
+  { icon:"🌊", name:"Soil Moisture Sensor", desc:"Measures water content in soil using electrical conductivity.", why:"📌 Essential for smart irrigation systems and automated plant watering.", projects:"Auto plant watering, Smart farm, Garden moisture alert", glow:"rgba(100,200,50,0.15)" },
+  { icon:"💧", name:"Water Level Sensor", desc:"Detects water presence and level using conductive probes.", why:"📌 Used in flood alerts, tank monitors, and home safety systems.", projects:"Water tank monitor, Flood alert, Aquarium controller", glow:"rgba(50,150,255,0.15)" },
+  { icon:"🔥", name:"Flame Sensor (IR Flame)", desc:"Detects fire/flames by sensing infrared radiation emitted by flames.", why:"📌 Critical in fire alarms, automatic fire sprinkler systems, and safety robots.", projects:"Fire alarm, Fire-fighting robot, Kitchen safety system", glow:"rgba(255,100,0,0.15)" },
+  { icon:"💨", name:"MQ Gas Sensors (MQ2/MQ135)", desc:"Detects combustible gases, smoke, LPG, CO2, and air quality.", why:"📌 Used in kitchen gas leak alarms, air quality monitors, and smart home safety.", projects:"Gas leak alarm, Air quality meter, Smart ventilation", glow:"rgba(200,200,50,0.15)" },
+  { icon:"🌬️", name:"BMP280/BME280 Pressure Sensor", desc:"Measures barometric pressure and altitude with high precision.", why:"📌 Used in weather stations, altimeters in drones, and environmental loggers.", projects:"Digital barometer, Drone altimeter, Weather logger", glow:"rgba(100,150,255,0.15)" },
+  { icon:"💡", name:"LDR (Light Dependent Resistor)", desc:"Resistance changes with light intensity — bright light = low resistance.", why:"📌 The simplest light sensor for automatic lights, day/night switches.", projects:"Auto street light, Light alarm, Sun tracker solar panel", glow:"rgba(255,230,50,0.15)" },
+  { icon:"🎤", name:"Sound/Microphone Sensor (KY-038)", desc:"Detects sound waves and claps, outputs analog or digital signal.", why:"📌 Used in clap-activated switches, voice-activated systems, and noise monitors.", projects:"Clap switch, Sound-activated light, Noise pollution meter", glow:"rgba(180,100,255,0.15)" },
+  { icon:"🧲", name:"Hall Effect / Magnetic Sensor", desc:"Detects presence of magnetic fields using the Hall effect.", why:"📌 Used in speedometers, proximity switches, brushless motor commutation.", projects:"RPM counter, Magnetic door lock, Tachometer", glow:"rgba(0,200,200,0.15)" },
+  { icon:"📐", name:"MPU-6050 (Gyroscope + Accelerometer)", desc:"6-axis IMU — measures acceleration in 3 axes and rotation in 3 axes.", why:"📌 The brain of every drone's flight controller and self-balancing robot.", projects:"Drone stabilizer, Balance bot, Gesture controller, Step counter", glow:"rgba(255,50,200,0.15)" },
+  { icon:"📡", name:"HC-05/HC-06 Bluetooth Module", desc:"Provides wireless Bluetooth communication (Classic BT 2.0).", why:"📌 Enables wireless control of Arduino projects from your phone.", projects:"BT car, Wireless sensor logger, Phone-controlled robot", glow:"rgba(50,100,255,0.15)" },
+  { icon:"📶", name:"ESP8266 / ESP32 (WiFi)", desc:"WiFi-enabled microcontroller module for IoT projects.", why:"📌 Connect any project to the internet — send sensor data to cloud, control via web.", projects:"IoT weather station, Smart home, Web-controlled LED", glow:"rgba(0,229,255,0.15)" },
+  { icon:"📍", name:"GPS Module (NEO-6M)", desc:"Receives GPS satellite signals to determine precise location (latitude, longitude).", why:"📌 Used in vehicle tracking, drone navigation, and location-based projects.", projects:"GPS tracker, Vehicle monitor, Bike lock alarm", glow:"rgba(50,200,100,0.15)" },
+  { icon:"👁️", name:"PIR Motion Sensor (HC-SR501)", desc:"Detects infrared heat from moving humans/animals within 7–10 meters.", why:"📌 The sensor in every automatic light and burglar alarm system.", projects:"Burglar alarm, Auto corridor light, Attendance system", glow:"rgba(255,100,200,0.15)" },
+  { icon:"🖐️", name:"Touch Sensor (TTP223)", desc:"Capacitive touch sensor — detects finger touch like a smartphone screen.", why:"📌 Used in touch-sensitive buttons for electronics with no mechanical parts.", projects:"Touch piano, Smart lamp, Capacitive keyboard", glow:"rgba(100,229,255,0.15)" },
+  { icon:"⚡", name:"Current Sensor (ACS712)", desc:"Measures AC or DC current flowing through a wire using Hall effect.", why:"📌 Used in energy meters, battery management, and overload protection.", projects:"Energy monitor, Appliance watt meter, Solar charge tracker", glow:"rgba(255,200,50,0.15)" },
+  { icon:"🌈", name:"Color Sensor (TCS34725)", desc:"Identifies colors by measuring RGB light intensity reflected from surfaces.", why:"📌 Used in sorting machines, color-mixing robots, and QC systems.", projects:"Color sorter robot, Fruit quality checker, LED color matcher", glow:"rgba(200,100,255,0.15)" },
+  { icon:"❤️", name:"Pulse / Heart Rate Sensor (MAX30100)", desc:"Measures blood oxygen (SpO2) and heart rate using optical light sensing.", why:"📌 Foundation of smartwatches and medical pulse oximeters.", projects:"Health monitor, Pulse oximeter clone, Wearable fitness tracker", glow:"rgba(255,50,80,0.15)" },
+  { icon:"🎯", name:"RFID Module (RC522)", desc:"Reads radio frequency ID cards/tags wirelessly (13.56 MHz NFC).", why:"📌 Used in attendance systems, library card scanners, and access control.", projects:"Attendance system, Library book tracker, Smart locker", glow:"rgba(50,100,255,0.15)" },
+  { icon:"🌡️", name:"Thermocouple / DS18B20", desc:"DS18B20: waterproof digital temperature sensor (−55°C to +125°C).", why:"📌 Used in water temperature monitoring, industrial process control, aquariums.", projects:"Aquarium monitor, Soil temp sensor, Industrial temp logger", glow:"rgba(255,150,50,0.15)" },
+  { icon:"🔍", name:"Fingerprint Sensor (R307/AS608)", desc:"Captures and identifies fingerprint patterns for biometric authentication.", why:"📌 Used in secure door locks, attendance systems, and safety devices.", projects:"Fingerprint door lock, Bio attendance, Safe locker", glow:"rgba(100,200,255,0.15)" },
+  { icon:"📷", name:"Camera Module (OV7670 / Pi Camera)", desc:"Captures images and video for machine vision and surveillance.", why:"📌 Used in face recognition, object detection, and surveillance systems.", projects:"Face detection door, QR code scanner, Smart surveillance", glow:"rgba(200,255,100,0.15)" },
+  { icon:"🔋", name:"Voltage/Current Sensor (INA219)", desc:"Measures bus voltage and current over I2C for power management.", why:"📌 Used in battery monitors, solar charge controllers, and power profilers.", projects:"Battery life indicator, Solar tracker, UPS monitor", glow:"rgba(255,229,50,0.15)" },
+  { icon:"🌬️", name:"Anemometer / Wind Speed Sensor", desc:"Measures wind speed using rotating cups that generate pulses.", why:"📌 Used in weather stations, drone pre-flight checks, and agricultural IoT.", projects:"DIY weather station, Wind energy project, Drone wind check", glow:"rgba(150,200,255,0.15)" },
+  { icon:"⚖️", name:"Load Cell (HX711)", desc:"Measures weight/force by detecting micro-deformations in metal.", why:"📌 Used in digital weighing scales, material testing, and force measurement.", projects:"Digital weighing scale, Luggage weight alert, Kitchen scale", glow:"rgba(200,200,100,0.15)" },
+  { icon:"💧", name:"pH Sensor", desc:"Measures acidity/alkalinity (pH 0–14) of liquid solutions.", why:"📌 Used in water quality testing, hydroponics, and chemical experiments.", projects:"Water quality monitor, Hydroponics controller, Pool pH meter", glow:"rgba(100,255,150,0.15)" },
+  { icon:"🌊", name:"Turbidity Sensor", desc:"Measures how murky or cloudy a liquid is (water quality).", why:"📌 Used in water treatment plants, aquarium monitoring, and environmental sensing.", projects:"Water quality system, Aquarium auto-clean, Environmental monitor", glow:"rgba(50,180,255,0.15)" },
+  { icon:"🧭", name:"Compass / Magnetometer (HMC5883L)", desc:"Measures Earth's magnetic field direction for digital compass applications.", why:"📌 Used in drone navigation, robot heading control, and orientation sensing.", projects:"Digital compass, Drone heading lock, Navigation robot", glow:"rgba(255,150,100,0.15)" },
+];
+
+/* ─── ATL COMPONENTS ─── */
+const ATL = [
+  { icon:"🤖", name:"Arduino Uno / Nano", desc:"Open-source microcontroller board. The heart of most ATL projects.", benefits:["Easy to program in C++","Large community + libraries","14 digital + 6 analog pins","USB powered","Huge project ecosystem"], color:"#00e5ff" },
+  { icon:"🍓", name:"Raspberry Pi 4", desc:"Full Linux computer on a tiny board. For advanced AI/vision projects.", benefits:["Run Python, OpenCV, TensorFlow","4GB RAM for complex tasks","40 GPIO pins","HDMI + Camera interface","Perfect for AI/ML projects"], color:"#e91e63" },
+  { icon:"📡", name:"ESP32 Dev Board", desc:"Powerful WiFi+Bluetooth microcontroller. Best choice for IoT projects.", benefits:["Dual-core 240 MHz processor","Built-in WiFi + Bluetooth","38 GPIO pins, touch sensors","Ultra-low power deep sleep","Best value IoT board"], color:"#ff6d00" },
+  { icon:"🔌", name:"L298N Motor Driver", desc:"H-bridge IC module to control 2 DC motors forward/reverse/speed.", benefits:["Controls 2 DC motors independently","PWM speed control input","Up to 2A per channel","Onboard 5V regulator","Essential for robot cars"], color:"#4caf50" },
+  { icon:"📟", name:"I2C LCD Module", desc:"16×2 LCD with I2C backpack — uses only 2 wires (SDA, SCL).", benefits:["Saves Arduino pins","Address selectable (0x27/0x3F)","Easy LiquidCrystal_I2C library","Adjustable backlight + contrast","Displays sensor data clearly"], color:"#7c4dff" },
+  { icon:"🔋", name:"Li-Po Battery (11.1V 2200mAh)", desc:"Lightweight lithium polymer battery — power source for robots & drones.", benefits:["High energy density","Used in all drones and RC planes","Needs balanced charger (safe!)","3S = 11.1V nominal","Discharge rating (C) matters for drones"], color:"#ff4081" },
+  { icon:"🛠️", name:"Breadboard + Jumper Wires", desc:"Prototyping tools for building circuits without soldering.", benefits:["No soldering needed","800-point solderless breadboard","Male-Male, Male-Female wire types","Reusable for all projects","Essential for learning circuits"], color:"#ffeb3b" },
+  { icon:"💡", name:"WS2812B RGB LED Strip (NeoPixel)", desc:"Addressable RGB LEDs — each LED individually controlled via 1 wire.", benefits:["16 million colors per LED","Any pattern/animation possible","FastLED library for Arduino","5V powered, 60mA per LED","Great for wearables and displays"], color:"#00e5ff" },
+  { icon:"🔊", name:"DFPlayer Mini + Speaker", desc:"MP3 player module that plays audio files from a micro SD card.", benefits:["Plays .mp3 and .wav files","Serial control from Arduino","3W amplifier built in","Great for talking robots","Sound effects in game projects"], color:"#ff6d00" },
+  { icon:"🖨️", name:"3D Printer (FDM)", desc:"Fused Deposition Modelling printer to create custom plastic parts.", benefits:["Design + print robot chassis","Custom sensor mounts","Drone frame prototypes","PLA filament easy to work with","Design in Tinkercad or Fusion 360"], color:"#9c27b0" },
+  { icon:"✂️", name:"Laser Cutter", desc:"Computer-controlled laser for precise cutting of wood, acrylic, cardboard.", benefits:["Cut precise robot parts","Aeromodelling wing ribs","Custom enclosures","Works with Inkscape designs","Fast and accurate at 0.1mm"], color:"#ff5252" },
+  { icon:"🔧", name:"Soldering Station", desc:"Tool to permanently join electronic components to PCBs with solder.", benefits:["Make permanent circuits","Solder sensor connections","Repair broken joints","60W temperature-controlled iron","Required for advanced projects"], color:"#78909c" },
+];
+
+/* ─── PROJECTS BY GRADE ─── */
+const PROJECTS = [
+  { grade:5, name:"Blinking LED Circuit", sensors:"LDR", comps:"LED, Resistor, Battery", learn:"Basic circuits, Ohm's Law, LED polarity", diff:"easy" },
+  { grade:5, name:"Traffic Light Model", sensors:"None", comps:"3 LEDs, Resistors, Arduino", learn:"Sequence control, digital output, timing", diff:"easy" },
+  { grade:5, name:"Simple Alarm Bell", sensors:"Push Button", comps:"Buzzer, LED, 9V battery", learn:"Series circuits, switches, alarms", diff:"easy" },
+  { grade:6, name:"Automatic Night Light", sensors:"LDR", comps:"LDR, Transistor, LED, Resistors", learn:"Sensors, transistor as switch, analog input", diff:"easy" },
+  { grade:6, name:"Touch-Activated LED", sensors:"Touch Sensor (TTP223)", comps:"Arduino, LED, Touch sensor", learn:"Capacitive sensing, digital I/O", diff:"easy" },
+  { grade:6, name:"Temperature Alert System", sensors:"DHT11", comps:"Arduino Uno, Buzzer, LED", learn:"Sensor reading, conditional programming", diff:"easy" },
+  { grade:7, name:"Distance Meter", sensors:"HC-SR04 Ultrasonic", comps:"Arduino, LCD Display", learn:"Ultrasonic waves, distance calculation, I2C", diff:"med" },
+  { grade:7, name:"Clap Switch", sensors:"Microphone (KY-038)", comps:"Arduino, Relay, Bulb", learn:"Sound detection, relay control, AC switching", diff:"med" },
+  { grade:7, name:"Plant Watering Alarm", sensors:"Soil Moisture Sensor", comps:"Arduino, LED, Buzzer", learn:"Analog sensors, threshold comparison", diff:"med" },
+  { grade:8, name:"Line Following Robot", sensors:"IR Sensor (×2)", comps:"Arduino, L298N, DC Motors, Chassis", learn:"Sensor array logic, motor control, robot chassis", diff:"med" },
+  { grade:8, name:"Gas Leak Detector", sensors:"MQ2 Gas Sensor", comps:"Arduino, Buzzer, LCD, LED", learn:"Analog thresholds, safety systems, calibration", diff:"med" },
+  { grade:8, name:"Digital Thermometer", sensors:"DS18B20", comps:"Arduino, OLED Display", learn:"1-Wire protocol, sensor calibration, display", diff:"med" },
+  { grade:9, name:"Obstacle Avoiding Robot", sensors:"HC-SR04, IR Sensors", comps:"Arduino, L298N, Servo, Motors", learn:"Autonomous decision making, servo scanning, robot logic", diff:"med" },
+  { grade:9, name:"Smart Security System", sensors:"PIR Sensor, RFID RC522", comps:"Arduino, Buzzer, LCD, LED", learn:"Motion detection, RFID cards, security logic", diff:"med" },
+  { grade:9, name:"Weather Station", sensors:"DHT22, BMP280, LDR", comps:"Arduino, LCD, RTC Module", learn:"Multi-sensor integration, real-time data, logging", diff:"hard" },
+  { grade:10, name:"Bluetooth Controlled Car", sensors:"HC-05 Bluetooth", comps:"Arduino, L298N, DC Motors, Li-Po", learn:"Serial communication, Bluetooth protocol, motor control", diff:"med" },
+  { grade:10, name:"IoT Temperature Monitor", sensors:"DHT11, ESP8266", comps:"OLED, ThingSpeak cloud", learn:"WiFi, HTTP requests, IoT cloud, data visualization", diff:"hard" },
+  { grade:10, name:"Self-Balancing Robot", sensors:"MPU-6050 IMU", comps:"Arduino, L298N, Motors, PID code", learn:"PID control, accelerometer, gyroscope, feedback loops", diff:"hard" },
+  { grade:11, name:"Drone Flight Controller", sensors:"MPU-6050, BMP280, GPS", comps:"ESC, BLDC Motors, RC Receiver", learn:"PID tuning, multi-axis control, ESC calibration", diff:"hard" },
+  { grade:11, name:"Face Detection Door Lock", sensors:"Pi Camera, PIR", comps:"Raspberry Pi, Servo, Relay", learn:"OpenCV, machine learning, Python, GPIO", diff:"hard" },
+  { grade:11, name:"Smart Irrigation System", sensors:"Soil Moisture, DHT22, LDR", comps:"ESP32, Water Pump, MOSFET", learn:"IoT, automated control, cloud dashboard", diff:"hard" },
+  { grade:12, name:"Autonomous Navigation Robot", sensors:"Lidar/Ultrasonic Array, IMU", comps:"Raspberry Pi, Motors, Camera", learn:"SLAM, path planning, sensor fusion, ROS basics", diff:"hard" },
+  { grade:12, name:"Fixed-Wing RC Plane Build", sensors:"Compass, GPS", comps:"Servo ×4, ESC, BLDC, Flight Controller", learn:"Aerodynamics, CG balance, flight control surfaces, PID", diff:"hard" },
+  { grade:12, name:"Health Monitoring Wearable", sensors:"MAX30100, MPU6050, DHT11", comps:"ESP32, OLED, Li-Po, PCB", learn:"Sensor fusion, wearable design, BLE, healthcare", diff:"hard" },
+];
+
+/* ─── AERO COMPONENTS ─── */
+const AERO_CARDS = [
+  { icon:"✈️", name:"Fixed-Wing RC Plane", desc:"Aircraft with wings that generate lift as they move through air.", items:["Foam/balsa wood body and wings","Ailerons, elevator, rudder control surfaces","Powered by single BLDC motor + propeller","Range: 500m to 5km with long-range RC","Longer flight time than drones (30–90 min)"] },
+  { icon:"🚁", name:"Quadcopter Drone", desc:"4-rotor aircraft — stable, easy to fly, and highly programmable.", items:["4 motors in X or + configuration","Clockwise + counter-clockwise props balance torque","Flight controller (FC) board is the brain","GPS hold, altitude hold, return-to-home features","Flight time: 10–25 min with LiPo"] },
+  { icon:"🎮", name:"RC Transmitter & Receiver", desc:"Radio control system to fly RC planes and drones wirelessly.", items:["Frequency: 2.4 GHz spread spectrum","SBUS or PWM signal to flight controller","6+ channels for full control","FlySky FS-i6, Radiomaster TX16S popular choices","Bind procedure pairs TX with RX"] },
+  { icon:"⚡", name:"ESC (Electronic Speed Controller)", desc:"Controls the speed of BLDC motors using PWM signals.", items:["Input: PWM from FC (1000–2000µs)","Output: 3-phase AC to BLDC motor","BLHeli_S/BLHeli_32 firmware most common","Current rating must exceed motor stall current","4-in-1 ESC saves space in drones"] },
+  { icon:"🌀", name:"BLDC Motor", desc:"Brushless DC motors — high RPM, efficient, long-lasting.", items:["KV rating = RPM per volt (1000KV @ 11.1V = 11,100 RPM)","Higher KV → smaller props, faster","Lower KV → larger props, more lift","3-phase winding: A, B, C","Rotor outside (outrunner) most common for drones"] },
+  { icon:"🔋", name:"Li-Po Battery for Drones", desc:"High discharge rate lithium polymer battery pack.", items:["3S (11.1V), 4S (14.8V), 6S (22.2V) common","C rating: 25C × 1500mAh = 37.5A max discharge","Always store at 3.7–3.85V per cell","Balance charge to protect cells","Never over-discharge below 3.0V per cell"] },
+  { icon:"🧠", name:"Flight Controller (FC)", desc:"The autopilot brain — reads sensors and adjusts motor speeds.", items:["Betaflight/ArduPilot firmware","Reads IMU (gyro+accel) 1000+ times per second","PID loops maintain stable flight","F4/F7 processor for fast loop times","Ardupilot supports fixed-wing + multirotor"] },
+  { icon:"🌍", name:"GPS + Compass Module", desc:"Provides location and heading for autonomous flight.", items:["NEO-M8N: high accuracy GPS","Heading lock (drone faces same direction)","Return-to-home safety feature","Geofencing to limit flight area","Required for Mission Planner waypoints"] },
+];
+
+const DRONE_PARTS = [
+  { icon:"🌀", name:"Propeller", desc:"Generates thrust by spinning and pushing air downward.", benefits:["2-blade vs 3-blade tradeoffs","Pitch affects efficiency vs thrust","Carbon fiber: light and stiff","Matched to motor KV and battery voltage","Quick-release props for racing"], color:"#00e5ff" },
+  { icon:"📡", name:"FPV Camera + VTX", desc:"First-Person View camera streams live video to goggles.", benefits:["160° wide-angle lens","5.8 GHz video transmitter","Low latency ~20ms","Used in racing drones","OSD shows battery, speed, altitude"], color:"#ff4081" },
+  { icon:"🔧", name:"Frame (Carbon Fiber)", desc:"Structural skeleton that holds all drone parts together.", benefits:["3K twill carbon fiber weave","H-frame, X-frame, stretch-X designs","Wheelbase: 180mm (racing) to 450mm (cinematic)","Arms removable for crash repair","Weight critical for flight time"], color:"#9c27b0" },
+];
+
+/* ─── LEARNING PATH ─── */
+const PATH_DATA = [
+  { grade:"5–6", dot:"01", left:{ title:"Electrical Basics", items:["Voltage, Current, Resistance","Series & Parallel circuits","LED, Resistor, Buzzer","Simple battery projects","Ohm's Law"] }, right:{ title:"First Projects", items:["Traffic light model","Night light with LDR","Simple alarm circuit","Basic Arduino blink"] }, lcolor:"var(--cyan)" },
+  { grade:"7–8", dot:"02", left:{ title:"Microcontrollers", items:["Arduino Uno introduction","Digital & Analog I/O","Sensors: DHT11, HC-SR04","Motor control with L298N","Programming in C++"] }, right:{ title:"Intermediate Projects", items:["Line following robot","Distance meter with LCD","Gas leak detector","Clap switch relay"] }, lcolor:"var(--neon)" },
+  { grade:"9–10", dot:"03", left:{ title:"Communication & IoT", items:["I2C, SPI, UART protocols","Bluetooth HC-05/HC-06","WiFi with ESP8266/ESP32","RFID and NFC cards","Cloud data logging"] }, right:{ title:"Advanced Projects", items:["Obstacle avoiding robot","IoT weather station","Smart security system","Bluetooth RC car"] }, lcolor:"var(--purple)" },
+  { grade:"11–12", dot:"04", left:{ title:"Advanced Systems", items:["Raspberry Pi + Python","OpenCV machine vision","PID control systems","PCB design basics","Drone flight controllers"] }, right:{ title:"Expert Projects", items:["Build & fly a drone","Face recognition door","Autonomous robot (SLAM)","Fixed-wing RC plane","Wearable health monitor"] }, lcolor:"var(--orange)" },
+];
+
+/* ─── GLOSSARY ─── */
+const GLOSSARY = [
+  ["Voltage (V)", "Electrical pressure that pushes current through a circuit. Like water pressure in a pipe."],
+  ["Current (A)", "Flow of electric charge. Measured in Amperes (A) or milliamps (mA)."],
+  ["Resistance (Ω)", "Opposition to current flow. Measured in Ohms. Higher resistance = less current."],
+  ["Ohm's Law", "V = I × R. Voltage equals Current times Resistance. The #1 law in electronics!"],
+  ["GPIO", "General Purpose Input/Output — the programmable pins on a microcontroller."],
+  ["PWM", "Pulse Width Modulation — rapidly switching on/off to simulate analog output. Used for motor speed and LED brightness."],
+  ["I2C", "Inter-Integrated Circuit — a 2-wire protocol (SDA + SCL) for connecting multiple sensors to one microcontroller."],
+  ["SPI", "Serial Peripheral Interface — 4-wire fast communication protocol for SD cards, displays, etc."],
+  ["UART", "Universal Asynchronous Receiver-Transmitter — simple 2-wire serial communication (TX & RX)."],
+  ["ADC", "Analog to Digital Converter — converts real-world analog voltages into digital numbers an MCU can read."],
+  ["DAC", "Digital to Analog Converter — converts digital numbers to analog voltage output."],
+  ["PID", "Proportional-Integral-Derivative control — algorithm that maintains stable state (used in drones, self-balancing robots)."],
+  ["PCB", "Printed Circuit Board — the green board that holds and connects all electronic components."],
+  ["SMD", "Surface Mount Device — tiny components soldered directly to PCB surface (no through-holes)."],
+  ["Firmware", "Software permanently programmed into a hardware device (like Arduino sketch on microcontroller)."],
+  ["Bootloader", "Small program that loads your code into the microcontroller via USB."],
+  ["ISR", "Interrupt Service Routine — code that runs immediately when an event occurs, pausing main program."],
+  ["Li-Po", "Lithium Polymer battery — light, high energy density. Used in drones, RC planes, phones."],
+  ["ESC", "Electronic Speed Controller — converts FC signal to 3-phase power for brushless motors."],
+  ["KV Rating", "For BLDC motors: RPM per Volt. 1000KV motor at 12V spins at ~12,000 RPM unloaded."],
+  ["Duty Cycle", "In PWM: percentage of time the signal is HIGH. 50% = half on, half off."],
+  ["Pull-up Resistor", "Resistor connecting input pin to VCC to ensure stable HIGH level when button unpressed."],
+  ["Ground (GND)", "The reference point (0V) for all voltage measurements in a circuit. The negative rail."],
+  ["VCC/VDD", "Positive power supply pin. VCC = +5V on Arduino, VDD = +3.3V on ESP32."],
+  ["Debouncing", "Filtering out rapid fluctuations when a button is pressed/released. Done in software or hardware."],
+  ["BLDC", "Brushless DC Motor — efficient, durable motor with no brushes. Used in drones and high-performance applications."],
+  ["IMU", "Inertial Measurement Unit — sensor combining accelerometer + gyroscope (+ sometimes magnetometer)."],
+  ["Telemetry", "Real-time data transmitted from a drone/vehicle to the operator's ground station."],
+  ["Throttle", "Controls the speed/power of motors. In RC: usually left stick up/down."],
+  ["Yaw/Pitch/Roll", "Three rotation axes of an aircraft. Yaw = left-right, Pitch = nose up-down, Roll = wing tilt."],
+];
+
+/* ═══════════════ RENDER FUNCTIONS ═══════════════ */
+
+function renderComponents() {
+  const grid = document.getElementById('comp-grid');
+  grid.innerHTML = COMPONENTS.map((c, i) => `
+    <div class="comp-card" style="--accent-color:${c.color}" onclick="toggleCard(${i})">
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div class="icon" style="background:${c.color}22">${c.icon}</div>
+        <div style="flex:1">
+          <h3>${c.name}</h3>
+          <p>${c.short}</p>
+        </div>
+        <span style="color:var(--muted);font-size:0.7rem;font-family:'Space Mono',monospace;flex-shrink:0" id="arrow-${i}">▼</span>
+      </div>
+      <div class="tags-row">
+        ${c.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
+      </div>
+      <div class="comp-detail" id="detail-${i}">
+        <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.5rem;font-style:italic">💡 ${c.why}</p>
+        <ul>${c.details.map(d => `<li>${d}</li>`).join('')}</ul>
+        <div style="margin-top:0.6rem">
+          <span style="font-size:0.7rem;color:var(--muted);font-family:'Space Mono',monospace">USES: </span>
+          ${c.uses.map(u => `<span class="tag-pill orange">${u}</span>`).join(' ')}
+        </div>
+        <div class="grade-badge">📚 ${c.grades}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCard(i) {
+  const d = document.getElementById(`detail-${i}`);
+  const a = document.getElementById(`arrow-${i}`);
+  d.classList.toggle('open');
+  a.textContent = d.classList.contains('open') ? '▲' : '▼';
+}
+
+function renderSensors() {
+  const grid = document.getElementById('sensor-grid');
+  grid.innerHTML = SENSORS.map(s => `
+    <div class="sensor-card" style="--glow-color:${s.glow}">
+      <div class="sensor-icon">${s.icon}</div>
+      <h3>${s.name}</h3>
+      <p>${s.desc}</p>
+      <div class="why">${s.why}</div>
+      <div class="projects-list">🚀 Projects: ${s.projects}</div>
+    </div>
+  `).join('');
+}
+
+function renderATL() {
+  const grid = document.getElementById('atl-grid');
+  grid.innerHTML = ATL.map(a => `
+    <div class="atl-card">
+      <div class="icon-big">${a.icon}</div>
+      <h3>${a.name}</h3>
+      <p>${a.desc}</p>
+      <ul class="benefit-list">
+        ${a.benefits.map(b => `<li>${b}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function renderProjects() {
+  const grades = [...new Set(PROJECTS.map(p => p.grade))].sort((a,b) => a-b);
+  const tabsEl = document.getElementById('grade-tabs');
+  tabsEl.innerHTML = `<button class="grade-btn active" onclick="filterGrade('all', this)">All Grades</button>` +
+    grades.map(g => `<button class="grade-btn" onclick="filterGrade(${g}, this)">Grade ${g}</button>`).join('');
+
+  const tbody = document.getElementById('project-tbody');
+  tbody.innerHTML = PROJECTS.map(p => `
+    <tr class="project-row show" data-grade="${p.grade}">
+      <td><strong>${p.name}</strong></td>
+      <td style="color:var(--neon)">${p.sensors}</td>
+      <td style="color:var(--muted)">${p.comps}</td>
+      <td>${p.learn}</td>
+      <td><span class="diff-badge diff-${p.diff}">${p.diff.toUpperCase()}</span> <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--gold)">G${p.grade}</span></td>
+    </tr>
+  `).join('');
+}
+
+function filterGrade(grade, btn) {
+  document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.project-row').forEach(row => {
+    if(grade === 'all' || parseInt(row.dataset.grade) === grade) {
+      row.classList.add('show'); row.style.display = '';
+    } else {
+      row.classList.remove('show'); row.style.display = 'none';
+    }
+  });
+}
+
+function renderAero() {
+  const grid = document.getElementById('aero-grid');
+  grid.innerHTML = AERO_CARDS.map(a => `
+    <div class="aero-card">
+      <div style="font-size:2.2rem;margin-bottom:0.6rem">${a.icon}</div>
+      <h3>${a.name}</h3>
+      <p class="desc">${a.desc}</p>
+      <ul class="aero-list">
+        ${a.items.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+
+  document.getElementById('drone-vs-rc').innerHTML = `
+    <div class="vs-card rc">
+      <div class="vs-title">✈️ RC Fixed-Wing Plane</div>
+      <div class="spec-row"><span class="spec-label">Flight Time</span><span class="spec-val">30–90 minutes</span></div>
+      <div class="spec-row"><span class="spec-label">Range</span><span class="spec-val">500m – 5+ km</span></div>
+      <div class="spec-row"><span class="spec-label">Best For</span><span class="spec-val">Long-range, efficiency</span></div>
+      <div class="spec-row"><span class="spec-label">Landing</span><span class="spec-val">Runway needed</span></div>
+      <div class="spec-row"><span class="spec-label">Hovering</span><span class="spec-val">❌ Not possible</span></div>
+      <div class="spec-row"><span class="spec-label">Build Difficulty</span><span class="spec-val">High (aerodynamics)</span></div>
+      <div class="spec-row"><span class="spec-label">Key Skill</span><span class="spec-val">Aerodynamics, CG balance</span></div>
+      <div class="spec-row"><span class="spec-label">Parts</span><span class="spec-val">Motor, 4 Servos, ESC, FC</span></div>
+      <div style="margin-top:1rem;font-size:0.78rem;color:var(--muted)">💡 Used in agriculture surveys, search-and-rescue, military reconnaissance, and high-speed FPV racing.</div>
+    </div>
+    <div class="vs-card drone">
+      <div class="vs-title">🚁 Quadcopter Drone</div>
+      <div class="spec-row"><span class="spec-label">Flight Time</span><span class="spec-val">10–25 minutes</span></div>
+      <div class="spec-row"><span class="spec-label">Range</span><span class="spec-val">100m – 1km (visual)</span></div>
+      <div class="spec-row"><span class="spec-label">Best For</span><span class="spec-val">Photography, inspection</span></div>
+      <div class="spec-row"><span class="spec-label">Landing</span><span class="spec-val">Anywhere (VTOL)</span></div>
+      <div class="spec-row"><span class="spec-label">Hovering</span><span class="spec-val">✅ Yes</span></div>
+      <div class="spec-row"><span class="spec-label">Build Difficulty</span><span class="spec-val">Medium (electronics)</span></div>
+      <div class="spec-row"><span class="spec-label">Key Skill</span><span class="spec-val">PID tuning, ESC setup</span></div>
+      <div class="spec-row"><span class="spec-label">Parts</span><span class="spec-val">4 Motors, 4 ESCs, FC, GPS</span></div>
+      <div style="margin-top:1rem;font-size:0.78rem;color:var(--muted)">💡 Used in photography/cinema, package delivery (Amazon), inspection, FPV racing, and automated agriculture.</div>
+    </div>
+  `;
+
+  const dg = document.getElementById('drone-parts-grid');
+  dg.innerHTML = DRONE_PARTS.map(d => `
+    <div class="atl-card" style="border-color:rgba(255,109,0,0.2)">
+      <div class="icon-big">${d.icon}</div>
+      <h3 style="color:var(--orange)">${d.name}</h3>
+      <p>${d.desc}</p>
+      <ul class="benefit-list">
+        ${d.benefits.map(b => `<li>${b}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function renderPath() {
+  const el = document.getElementById('path-timeline');
+  el.innerHTML = PATH_DATA.map(p => `
+    <div class="path-item">
+      <div class="path-box path-left">
+        <h4 style="color:${p.lcolor}">${p.left.title}</h4>
+        <ul>${p.left.items.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+      <div style="text-align:center">
+        <div class="path-dot" style="background:${p.lcolor}22;border-color:${p.lcolor};color:${p.lcolor}">${p.dot}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--muted);margin-top:4px">G${p.grade}</div>
+      </div>
+      <div class="path-box path-right">
+        <h4 style="color:var(--cyan)">${p.right.title}</h4>
+        <ul>${p.right.items.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderGlossary() {
+  const el = document.getElementById('gloss-grid');
+  el.innerHTML = GLOSSARY.map(([term, def]) => `
+    <div class="gloss-item">
+      <div class="gloss-term">${term}</div>
+      <div class="gloss-def">${def}</div>
+    </div>
+  `).join('');
+}
+
+function scrollTo(id) {
+  document.querySelector(id).scrollIntoView({ behavior:'smooth' });
+}
+
+/* ═══════════════ INIT ═══════════════ */
+renderComponents();
+renderSensors();
+renderATL();
+renderProjects();
+renderAero();
+renderPath();
+renderGlossary();
+
+/* ─── ADVANCED SENSORS DATA ─── */
+const ADV_SENSORS = [
+  {
+    icon:"🌡️", name:"BME688 Environmental Sensor",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BME680_Sensor.jpg/320px-BME680_Sensor.jpg",
+    imgLabel:"BME688 Module",
+    desc:"Measures temperature, humidity, pressure, and air quality (VOC gas) in one chip. The most advanced environmental sensor for IoT.",
+    specs:[["Interface","I2C / SPI"],["Supply","1.8–3.6V"],["Temp Range","−40 to +85°C"],["Gas Detection","VOC / IAQ"]],
+    uses:"Weather stations · Smart home air quality · Drone pre-flight checks · Industrial monitoring"
+  },
+  {
+    icon:"📐", name:"VL53L1X ToF Distance Sensor",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/VL53L0X_breakout_board.jpg/320px-VL53L0X_breakout_board.jpg",
+    imgLabel:"ToF Sensor Module",
+    desc:"Time-of-Flight laser ranging — measures distance from 4mm to 4 meters with millimetre precision using invisible laser pulses.",
+    specs:[["Range","4mm – 4m"],["Interface","I2C"],["Accuracy","±1mm"],["Update Rate","50Hz"]],
+    uses:"Drone obstacle avoidance · Robot navigation · Touchless button · Liquid level detection"
+  },
+  {
+    icon:"🧠", name:"ESP32-CAM AI Vision Module",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Esp32-cam.jpg/320px-Esp32-cam.jpg",
+    imgLabel:"ESP32-CAM Module",
+    desc:"WiFi-enabled microcontroller with integrated OV2640 camera. Runs face detection, QR scanning, and image classification on-device.",
+    specs:[["CPU","Dual-core 240MHz"],["Camera","OV2640 2MP"],["WiFi","802.11 b/g/n"],["RAM","520KB SRAM"]],
+    uses:"Face recognition door lock · Security cam · QR scanner · AI pet feeder"
+  },
+  {
+    icon:"📡", name:"LoRa SX1278 Long Range Radio",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/LoRa_module.jpg/320px-LoRa_module.jpg",
+    imgLabel:"LoRa 433MHz Module",
+    desc:"Long-range (10km+) wireless communication using Chirp Spread Spectrum. Used in agriculture IoT, drone telemetry, and remote sensing.",
+    specs:[["Range","10+ km (LoS)"],["Frequency","433/868/915MHz"],["Interface","SPI"],["Power","<1mA sleep"]],
+    uses:"Farm IoT network · Drone telemetry · Forest fire alert · Smart meter reading"
+  },
+  {
+    icon:"⚡", name:"INA3221 Triple-Channel Power Monitor",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/INA219_breakout.jpg/320px-INA219_breakout.jpg",
+    imgLabel:"Power Monitor Module",
+    desc:"Monitors voltage, current, and power across 3 independent channels simultaneously over I2C. Essential for battery management in drones.",
+    specs:[["Channels","3 independent"],["Interface","I2C"],["Voltage","0–26V"],["Current","±1.6A each"]],
+    uses:"Drone battery management · Solar charge monitoring · Multi-motor power analysis · UPS monitoring"
+  },
+  {
+    icon:"🌈", name:"AS7341 11-Channel Spectral Sensor",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/TCS34725_Color_Sensor.jpg/320px-TCS34725_Color_Sensor.jpg",
+    imgLabel:"Spectral Color Sensor",
+    desc:"Measures light across 11 wavelength channels from 415nm to 940nm. Used for precise color analysis, plant health monitoring, and food quality.",
+    specs:[["Channels","11 spectral"],["Interface","I2C"],["Range","415–940nm"],["Supply","1.8–3.6V"]],
+    uses:"Plant health monitoring · Food freshness detector · Skin analysis · Industrial color QC"
+  },
+  {
+    icon:"🔊", name:"INMP441 I2S MEMS Microphone",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/INMP441_microphone_module.jpg/320px-INMP441_microphone_module.jpg",
+    imgLabel:"MEMS Microphone Module",
+    desc:"Digital I2S MEMS microphone with flat frequency response. Used in voice recognition, audio FFT analysis, and AI speech projects.",
+    specs:[["Interface","I2S Digital"],["SNR","61dB"],["Freq Response","60Hz – 15kHz"],["Supply","1.8–3.3V"]],
+    uses:"Voice assistant (Alexa-like) · Sound FFT analyser · Noise pollution monitor · Clap recognition AI"
+  },
+  {
+    icon:"🧲", name:"AS5600 Magnetic Encoder",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/AS5600_Encoder.jpg/320px-AS5600_Encoder.jpg",
+    imgLabel:"Magnetic Angle Sensor",
+    desc:"Contactless magnetic angle sensor with 12-bit resolution (0.088° precision). No physical contact means zero wear — used in robotics and motors.",
+    specs:[["Resolution","12-bit (4096 steps)"],["Interface","I2C / Analog"],["Range","0–360°"],["Supply","3.3–5V"]],
+    uses:"Robot joint feedback · Motor position control · Drone gimbal · Throttle/joystick position"
+  },
+];
+
+/* ─── SMART PROJECTS DATA ─── */
+const SMART_PROJECTS = [
+  {
+    emoji:"🌿", level:"student", levelLabel:"Student Level",
+    name:"AI Smart Greenhouse",
+    desc:"Automated greenhouse using multiple sensors to monitor and control temperature, humidity, soil moisture, CO2, and lighting automatically.",
+    tech:["DHT22","Soil Moisture","MQ135 CO2","Relay Module","ESP32","OLED Display"],
+    outcome:"Learns: IoT + automation, data logging, threshold-based control, energy saving"
+  },
+  {
+    emoji:"🚦", level:"student", levelLabel:"Student Level",
+    name:"Smart Traffic Density Monitor",
+    desc:"Camera + IR sensors count vehicle density in real-time and adjust traffic light timing dynamically to reduce congestion.",
+    tech:["IR Sensors","ESP32-CAM","NeoPixel LEDs","Servo Motor","Node-RED Dashboard"],
+    outcome:"Learns: Computer vision basics, dynamic control systems, IoT dashboard"
+  },
+  {
+    emoji:"🏥", level:"trainer", levelLabel:"Trainer Level",
+    name:"Wearable Health Monitor",
+    desc:"Wrist-worn device tracking heart rate, SpO2, body temperature, and steps. Sends data to mobile app via Bluetooth for health insights.",
+    tech:["MAX30102","DS18B20","MPU6050","HC-05 BT","OLED","Li-Po Battery","3D Printed Case"],
+    outcome:"Learns: Biomedical sensors, BLE communication, wearable design, PCB layout"
+  },
+  {
+    emoji:"🚁", level:"trainer", levelLabel:"Trainer Level",
+    name:"Autonomous Drone System",
+    desc:"Fully autonomous quadcopter with GPS waypoint navigation, obstacle avoidance via ToF sensors, and live video feed.",
+    tech:["GPS NEO-6M","VL53L1X ToF","MPU6050 IMU","ESP32","FPV Camera","Flight Controller","LoRa Telemetry"],
+    outcome:"Learns: PID tuning, GPS navigation, sensor fusion, embedded control systems"
+  },
+  {
+    emoji:"🌊", level:"student", levelLabel:"Student Level",
+    name:"Water Quality IoT Station",
+    desc:"Monitors pH, turbidity, temperature, and TDS of water bodies in real-time. Data uploaded to cloud dashboard for analysis.",
+    tech:["pH Sensor","Turbidity Sensor","DS18B20","TDS Meter","ESP32","ThingSpeak Cloud"],
+    outcome:"Learns: Environmental monitoring, cloud IoT, multi-sensor integration"
+  },
+  {
+    emoji:"🤖", level:"advanced", levelLabel:"Advanced Level",
+    name:"AI Vision Robot Arm",
+    desc:"6-DOF robotic arm that uses a camera to detect objects by color, picks them up, and sorts them into bins automatically.",
+    tech:["OV7670 Camera","OpenCV","6× Servo","Arduino Mega","Python AI","Color Sensor TCS34725"],
+    outcome:"Learns: Inverse kinematics, machine vision, servo coordination, AI-hardware integration"
+  },
+  {
+    emoji:"⚡", level:"trainer", levelLabel:"Trainer Level",
+    name:"Smart Energy Management System",
+    desc:"Monitors real-time power consumption of multiple appliances, detects anomalies, and auto-cuts power on overload using ML threshold.",
+    tech:["INA3221","ACS712","PZEM-004T","ESP32","MQTT Broker","Grafana Dashboard","Relay Bank"],
+    outcome:"Learns: Power electronics, MQTT protocol, data visualization, anomaly detection"
+  },
+  {
+    emoji:"🎤", level:"advanced", levelLabel:"Advanced Level",
+    name:"Voice-Controlled Smart Home Hub",
+    desc:"Offline voice recognition using INMP441 microphone + ESP32 to control lights, fans, and security with custom wake words.",
+    tech:["INMP441 MEMS Mic","ESP32-S3","Edge Impulse ML","Relay Module","OLED","Wi-Fi Mesh"],
+    outcome:"Learns: TinyML/Edge AI, audio DSP, home automation protocol, model deployment"
+  },
+  {
+    emoji:"🏗️", level:"advanced", levelLabel:"Advanced Level",
+    name:"Structural Health Monitor",
+    desc:"Attaches MEMS accelerometers to bridges or buildings to detect vibrations, micro-cracks, and stress in real-time. Sends alerts via LoRa.",
+    tech:["ADXL345 Accel","Strain Gauge + HX711","LoRa SX1278","ESP32","SD Card Logger","Python Analysis"],
+    outcome:"Learns: Structural analysis, signal processing, long-range IoT, data science"
+  },
+];
+
+function renderAdvSensors() {
+  const grid = document.getElementById('adv-sensor-grid');
+  if (!grid) return;
+  grid.innerHTML = ADV_SENSORS.map(s => `
+    <div class="adv-card">
+      <div class="adv-img-wrap">
+        <img src="${s.img}" alt="${s.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="adv-img-fallback" style="display:none">${s.icon}</div>
+        <div class="adv-img-label">${s.imgLabel}</div>
+      </div>
+      <div class="adv-body">
+        <h3>${s.icon} ${s.name}</h3>
+        <p>${s.desc}</p>
+        <div class="adv-specs">
+          ${s.specs.map(([k,v]) => `<div class="adv-spec"><span>${k}</span>${v}</div>`).join('')}
+        </div>
+        <div class="adv-uses">🚀 Uses: ${s.uses}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSmartProjects() {
+  const grid = document.getElementById('smart-proj-grid');
+  if (!grid) return;
+  const levelColors = { student:'var(--neon)', trainer:'var(--purple)', advanced:'var(--pink)' };
+  grid.innerHTML = SMART_PROJECTS.map(p => `
+    <div class="smart-proj-card">
+      <div class="proj-level-banner level-${p.level}">${p.levelLabel}</div>
+      <div class="proj-header">
+        <div class="proj-emoji">${p.emoji}</div>
+        <h3>${p.name}</h3>
+        <p style="font-size:0.8rem;color:var(--muted);margin:0">${p.desc}</p>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tech-row">
+          ${p.tech.map(t => `<span class="tag-pill">${t}</span>`).join('')}
+        </div>
+        <div class="proj-outcome">📚 ${p.outcome}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ─── MOBILE NAV TOGGLE ─── */
+document.getElementById('nav-toggle').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('nav-links').classList.remove('open'));
+});
+
+renderAdvSensors();
+renderSmartProjects();
+</script>
+</body>
+</html>
